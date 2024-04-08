@@ -50,7 +50,7 @@ assert_eq!(top_match.unwrap().text,String::from("tomato"));
 
 #![deny(missing_docs)]
 
-use mem_dbg::{MemDbg, MemSize};
+use mem_dbg::{MemDbg, MemSize, SizeFlags};
 use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet};
 use std::f32;
@@ -459,7 +459,6 @@ impl NgramBuilder {
     }
 }
 
-#[derive(MemDbg, MemSize)]
 /// Holds a corpus of words and their ngrams, allowing fuzzy matches of
 /// candidate strings against known strings in the corpus.
 pub struct Corpus {
@@ -469,6 +468,16 @@ pub struct Corpus {
     ngrams: HashMap<String, Ngram>,
     gram_to_words: HashMap<String, Vec<String>>,
     key_trans: Box<dyn Fn(&str) -> String + Send + Sync>,
+}
+
+impl MemSize for Corpus {
+    fn mem_size(&self, flags: SizeFlags) -> usize {
+        self.arity.mem_size(flags)
+            + self.pad_left.mem_size(flags)
+            + self.pad_right.mem_size(flags)
+            + self.ngrams.mem_size(flags)
+            + self.gram_to_words.mem_size(flags)
+    }
 }
 
 impl std::fmt::Debug for Corpus {
@@ -624,7 +633,6 @@ impl Corpus {
     }
 }
 
-#[derive(MemDbg, MemSize)]
 /// Build an Ngram Corpus, one setting at a time.
 // We provide a builder for Corpus to ensure initialization operations are
 // performed in the correct order, without requiring an extensive parameter list
