@@ -16,7 +16,7 @@ edition = "2021"
 name = "ngrammatic"
 
 [dependencies]
-mem_dbg = { git = "https://github.com/LucaCappelletti94/mem_dbg-rs.git", branch = "main" }
+mem_dbg = "0.1.8"
 
 [package.metadata]
 msrv = "1.27.2"
