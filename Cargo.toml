@@ -10,11 +10,13 @@ readme = "README.md"
 categories = ["text-processing"]
 keywords = ["fuzzy", "ngrams", "shingles"]
 license = "MIT"
+edition = "2021"
 
 [lib]
 name = "ngrammatic"
 
 [dependencies]
+mem_dbg = "0.1.8"
 
 [package.metadata]
 msrv = "1.27.2"

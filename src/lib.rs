@@ -50,6 +50,7 @@ assert_eq!(top_match.unwrap().text,String::from("tomato"));
 
 #![deny(missing_docs)]
 
+use mem_dbg::{MemDbg, MemSize};
 use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet};
 use std::f32;
@@ -57,7 +58,7 @@ use std::hash::{Hash, Hasher};
 
 /// Holds a fuzzy match search result string, and its associated similarity
 /// to the query text.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, MemSize, MemDbg)]
 pub struct SearchResult {
     /// The text of a fuzzy match
     pub text: String,
@@ -88,7 +89,7 @@ impl SearchResult {
 /// Having some sort of padding is especially important for small words
 /// Auto pad pre/appends `arity`-1 space chars
 /// [Read more about the effect of ngram padding](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0107510)
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, MemSize, MemDbg)]
 pub enum Pad {
     /// No padding should be added before generating ngrams.
     None,
@@ -130,7 +131,7 @@ impl Pad {
 
 /// Stores a "word", with all its n-grams. The "arity" member determines the
 /// value of "n" used in generating the n-grams.
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, MemSize, MemDbg)]
 pub struct Ngram {
     /// The "symbol size" for the ngrams
     pub arity: usize,
@@ -340,7 +341,7 @@ impl Ngram {
 // We provide a builder for ngrams to ensure initialization operations are
 // performed in the correct order, without requiring an extensive parameter list
 // to a constructor method, and allowing default values by omission.
-#[derive(Debug, Default)]
+#[derive(Debug, Default, MemSize, MemDbg)]
 pub struct NgramBuilder {
     arity: usize,
     pad_left: Pad,
@@ -458,6 +459,7 @@ impl NgramBuilder {
     }
 }
 
+#[derive(MemDbg, MemSize)]
 /// Holds a corpus of words and their ngrams, allowing fuzzy matches of
 /// candidate strings against known strings in the corpus.
 pub struct Corpus {
@@ -622,6 +624,7 @@ impl Corpus {
     }
 }
 
+#[derive(MemDbg, MemSize)]
 /// Build an Ngram Corpus, one setting at a time.
 // We provide a builder for Corpus to ensure initialization operations are
 // performed in the correct order, without requiring an extensive parameter list
